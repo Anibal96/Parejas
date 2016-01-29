@@ -8,7 +8,10 @@ import java.util.Collections;
  */
 public class Clase
 {
+    //Coleccion que almacena la lista de los alumnos.
     private ArrayList<String> alumnos;
+    //Coleccion que almacena la lista de los alumnos por orden en parejas.
+    private ArrayList<String> alumnosOrdenados;
 
     /**
      * Constructor for objects of class Clase
@@ -42,7 +45,6 @@ public class Clase
         alumnos.add("Sánchez Manzano, Adán");
         alumnos.add("Serrano García, Verónica");
         alumnos.add("Tascón González, Anibal");
-        alumnos.add("pepito");
     }
 
     /**
@@ -51,38 +53,44 @@ public class Clase
     public void hacerParejas ()
     {
         Collections.shuffle(alumnos);
-        boolean pareja = true;
+        boolean parejaYaFormada = true;
         int cont = 0;
-        if ((alumnos.size() % 2) == 0){
-            for(String alumno : alumnos){
-                if (pareja){
-                    cont++;
-                    pareja = false;
-                }
-                else{
-                    pareja = true;
-                }
-                String nAsig = "%02d";
-                String resultado = String.format(nAsig,cont);
-                System.out.println("00" + resultado + alumno);
+        alumnosOrdenados = new ArrayList<String>();
+        for(String alumno : alumnos){
+            if (cont == (alumnos.size()/2)){
+                parejaYaFormada = false;
             }
+            else if(parejaYaFormada){
+                cont++;
+                parejaYaFormada = false;
+            }
+            else{
+                parejaYaFormada = true;
+            }
+            System.out.println("00" + String.format("%02d",cont) + alumno);
+            alumnosOrdenados.add(alumno);
+        }
+    }
+
+    /**
+     * Método que muestra los nombre de los alumnos que tengan el mismo codigo que introduce el usuario.
+     */
+    public String nombreAlumnosPareja (int numero)
+    {
+        String nombreAlumnosConEsteCodigo;
+        if (alumnosOrdenados == null){
+            nombreAlumnosConEsteCodigo = "Primero tienes que formar las parejas.";
         }
         else{
-            for(String alumno : alumnos){
-                if (cont == (alumnos.size()/2)){
-                    
-                }
-                else if(pareja){
-                    cont++;
-                    pareja = false;
-                }
-                else{
-                    pareja = true;
-                }
-                String nAsig = "%02d";
-                String resultado = String.format(nAsig,cont);
-                System.out.println("00" + resultado + alumno);
+            int indice = (numero*2);
+            if(((indice)+1) == alumnosOrdenados.size()){
+                nombreAlumnosConEsteCodigo = (alumnosOrdenados.get(indice-2) + "/" + alumnosOrdenados.get(indice-1) 
+                    + "/" + alumnosOrdenados.get(indice));
+            }
+            else{
+                nombreAlumnosConEsteCodigo = (alumnosOrdenados.get(indice-2) + "/" + alumnosOrdenados.get(indice-1));
             }
         }
+        return nombreAlumnosConEsteCodigo;
     }
 }
